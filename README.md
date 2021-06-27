@@ -4,7 +4,7 @@ This is a mempool monitor nodeJS app that can be used to monitor pending transac
 
 The app comes with the ability to decode transaction input data for any UniswapV2 clone router, as well as Uniswap's V3 SwapRouter and NonfungiblePositionManager.
 
-Note:  The only reasone the name is 'polygon-mempool-monitor' is because it was originally created to monitor the mempool on Polygon, but I realized it will work with other chains.
+Note:  The only reason the name is 'polygon-mempool-monitor' is because it was originally created to monitor the mempool on Polygon, but I realized it will work with other chains.
 
 The steps to get this working are simple...
 
@@ -17,7 +17,7 @@ git clone https://github.com/jjordan-quantum/polygon-mempool-monitor.git
 Then cd into the new directory:
 
 ```
-cd polygon-mempool-monitoring
+cd polygon-mempool-monitor
 ```
 
 Then initialize an node project and install dependencies:
