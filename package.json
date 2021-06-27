@@ -1,9 +1,10 @@
 {
-  "name": "serve-static",
+  "name": "polygon-mempool-monitor",
   "version": "1.0.0",
-  "description": "",
+  "description": "the contents of the root dir should be copied into an intialized express project",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,5 +15,13 @@
     "express": "^4.17.1",
     "node-jsencrypt": "^1.0.0",
     "web3": "^1.3.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjordan-quantum/polygon-mempool-monitor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jjordan-quantum/polygon-mempool-monitor/issues"
+  },
+  "homepage": "https://github.com/jjordan-quantum/polygon-mempool-monitor#readme"
 }

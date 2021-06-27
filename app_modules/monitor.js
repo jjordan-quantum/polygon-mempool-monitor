@@ -1,19 +1,22 @@
 const Web3 = require('web3')
 const fs = require('fs')
 const abiDecoder = require('abi-decoder'); // NodeJS
+const util = require('util')
 
 
 // VARIABLES FOR TESTING ON ROPSTEN
 // =============================================================================
 
-//const web3 = new Web3('https://ropsten.infura.io/v3/5595014ec4194f70bb6ef58f1cf3e9fc');
-var web3 = new Web3('wss://late-green-field.matic.quiknode.pro/16222f7b09b4dfd6915812422ae62e81f5183c70/')
+//const web3 = new Web3('wss://mainnet.infura.io/ws/v3/5595014ec4194f70bb6ef58f1cf3e9fc');
+var web3;
 var UniswapV2RouterAddress = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D';
+var UniswapV3RouterAddress = '0xE592427A0AEce92De3Edee1F18E0157C05861564';
+var UniswapV3NonfungiblePositionManagerAddress = '0xC36442b4a4522E871399CD717aBDD847Ab11FE88';
 
 // OTHER REQUIRED VARIABLES
 // =============================================================================
 
-const BN = web3.utils.BN;
+const BN = Web3.utils.BN;
 
 var transactionSender = false;
 var routerAddress = false;
@@ -224,7 +227,7 @@ function checkFilter() {
   });
 
   const uniRouter = UniswapV2RouterAddress.toLowerCase();
-
+/*
   fs.readFile('./app_modules/abis/UniswapV2Router02.json', (err, data) => {
       if (err) {
           console.log(`Error reading file from disk: ${err}`);
@@ -235,7 +238,18 @@ function checkFilter() {
           getData();
       }
   });
-
+  */
+  var _routerABI_data;
+  if (routerAddress.toLowerCase() == UniswapV3RouterAddress.toLowerCase()) {
+    _routerABI_data = fs.readFileSync('./app_modules/abis/IUniswapV3SwapRouter.json');
+  } else if (routerAddress.toLowerCase() == UniswapV3NonfungiblePositionManagerAddress.toLowerCase()) {
+    _routerABI_data = fs.readFileSync('./app_modules/abis/UniswapV3NonfungiblePositionManager.json');
+  } else {
+    _routerABI_data = fs.readFileSync('./app_modules/abis/UniswapV2Router02.json');
+  }
+  var RouterABI = JSON.parse(_routerABI_data);
+  abiDecoder.addABI(RouterABI);
+  getData();
 
   function getData() {
 
@@ -274,7 +288,29 @@ function checkFilter() {
                 transactions.push(txHash);
                 decodedData = abiDecoder.decodeMethod(tx.input);
 
-                console.log('Input: ', decodedData);
+                console.log('Input:');
+                console.log(util.inspect(decodedData, false, null, true));
+                if(decodedData.name) {
+                  if(decodedData.name == 'multicall') {
+                    console.log('MULTICALL:');
+                    if(decodedData.params) {
+                      if(decodedData.params[0].value) {
+                        var functions = decodedData.params[0].value;
+                        for(var i = 0; i < functions.length; i++) {
+                          var decodedFunction = abiDecoder.decodeMethod(functions[i]);
+                          console.log(util.inspect(decodedFunction, false, null, true))
+                        }
+                      }
+                    }
+                  }
+                }
+                /*
+                if(decodedData.params) {
+                  if(decodedData.params[0].value) {
+                    console.log('value (verbose): ', decodedData.params[0].value);
+                  }
+                }
+                */
               }
             }
 
